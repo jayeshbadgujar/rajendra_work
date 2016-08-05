@@ -14,6 +14,18 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class UserDetailSerializer(ModelSerializer):
+	class Meta:
+		model = User
+		fields = [
+			'username',
+			'email',
+			'first_name',
+			'last_name',
+		]
+
+
+
 class UserCreateSerializer(ModelSerializer):
 	email = EmailField(label='Email Address')
 	email2 = EmailField(label='Confirm Email')
@@ -73,7 +85,7 @@ class UserCreateSerializer(ModelSerializer):
 class UserLoginSerializer(ModelSerializer):
 	token = CharField(allow_blank=True, read_only=True)
 	username = CharField(required=False, allow_blank=True)
-	email = EmailField(label='Email Address', required=False, allow_blank=True)
+	email = EmailField(label='Email Address', required=True, allow_blank=True)
 	class Meta:
 		model = User
 		fields = [

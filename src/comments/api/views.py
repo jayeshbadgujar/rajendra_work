@@ -40,7 +40,7 @@ from rest_framework.permissions import (
 class CommentCreateAPIView(CreateAPIView):
 	queryset = Comment.objects.all()
 	# serializer_class = PostCreateUpdateSerializer
-	permission_classes = [IsAuthenticated]
+	# permission_classes = [IsAuthenticated]
 
 	def get_serializer_class(self):
 		model_type = self.request.GET.get("type")
@@ -62,6 +62,7 @@ class CommentCreateAPIView(CreateAPIView):
 class CommentDetailAPIView(RetrieveUpdateAPIView, DestroyModelMixin, UpdateModelMixin):
 	queryset = Comment.objects.filter(id__gte=0)
 	serializer_class = CommentDetailSerializer
+	permission_classes = [IsAuthenticatedOrReadOnly]
 
 	def put(self, request, *args, **kwargs):
 		return self.update(request, *args, **kwargs)
@@ -72,6 +73,7 @@ class CommentDetailAPIView(RetrieveUpdateAPIView, DestroyModelMixin, UpdateModel
 
 class CommentListAPIView(ListAPIView):
 	serializer_class = CommentSerializer
+	permission_classes = [AllowAny]
 	filter_backends = [SearchFilter]
 	search_fields = ['content', 'user_first_name']
 	pagination_class = PostPageNumberPagination #PageNumberPagination

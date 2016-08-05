@@ -39,7 +39,7 @@ from rest_framework.permissions import (
 class PostCreateAPIView(CreateAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostCreateUpdateSerializer
-	permission_classes = [IsAuthenticated]
+	# permission_classes = [IsAuthenticated]
 
 	def perform_create(self, serializer):
 		serializer.save(user=self.request.user)
@@ -49,6 +49,7 @@ class PostDetailAPIView(RetrieveUpdateAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostDetailSerializer
 	lookup_field = 'slug'
+	permission_classes = [AllowAny]
 	# lookup_url_kwargs = "abc"
 
 
@@ -56,7 +57,7 @@ class PostUpdateAPIView(RetrieveUpdateAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostCreateUpdateSerializer
 	lookup_field = 'slug'
-	permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+	permission_classes = [IsOwnerOrReadOnly]
 	# lookup_url_kwargs = "abc"
 
 	def perform_update(self, serializer):
@@ -67,12 +68,13 @@ class PostDeleteAPIView(DestroyAPIView):
 	queryset = Post.objects.all()
 	serializer_class = PostDetailSerializer
 	lookup_field = 'slug'
-	permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+	permission_classes = [IsOwnerOrReadOnly]
 	# lookup_url_kwargs = "abc"
 
 
 class PostListAPIView(ListAPIView):
 	serializer_class = PostListSerializer
+	permission_classes = [AllowAny]
 	filter_backends = [SearchFilter]
 	search_fields = ['title', 'content', 'user_first_name']
 	pagination_class = PostPageNumberPagination #PageNumberPagination

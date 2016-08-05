@@ -145,14 +145,38 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn")
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+
+    ),
+    # 'DEFAULT_PARSER_CLASSES': (
+    #     'rest_framework.parsers.JSONParser',
+    # )
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication'
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    )
+}
 
 
 
+"""
 
+curl -X POST -d "username=admin&password=swami1234" http://127.0.0.1:8000/api/auth/token/
 
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MTQsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiZXhwIjoxNDcwMzgwMzY1fQ.iGcN96i7Hf0yO-jS9TSFsCR-h9oKVP33f7oOmQ_jYmE
 
+curl -H "Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwidXNlcl9pZCI6MTQsImVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiZXhwIjoxNDcwMzgwMzY1fQ.iGcN96i7Hf0yO-jS9TSFsCR-h9oKVP33f7oOmQ_jYmE" http://127.0.0.1:8000/api/auth/comments/
 
+curl http://127.0.0.1:8000/api/comments/
 
+"""
 
 
 
