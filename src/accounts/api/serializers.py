@@ -9,20 +9,20 @@ from rest_framework.serializers import (
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
-
+from rest_framework import serializers
 
 User = get_user_model()
 
 
-class UserDetailSerializer(ModelSerializer):
-	class Meta:
-		model = User
-		fields = [
-			'username',
-			'email',
-			'first_name',
-			'last_name',
-		]
+# class UserDetailSerializer(ModelSerializer):
+# 	class Meta:
+# 		model = User
+# 		fields = [
+# 			'username',
+# 			'email',
+# 			'first_name',
+# 			'last_name',
+# 		]
 
 
 
@@ -122,3 +122,28 @@ class UserLoginSerializer(ModelSerializer):
 
 		data["token"] = "SOME RANDOM TOKEN"
 		return data
+
+
+class UserListSerializer(ModelSerializer):
+	class Meta:
+		model = User
+		fields = [
+			'id',
+			'username',
+			'first_name',
+			'last_name',
+			'email',
+		]
+
+
+class UserDetailSerializer(ModelSerializer):
+	owner = serializers.ReadOnlyField(source='owner.username')
+	class Meta:
+		model = User
+		fields = [
+			'id',
+			'username',
+			'first_name',
+			'last_name',
+			'email',
+		]

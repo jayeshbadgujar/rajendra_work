@@ -8,8 +8,10 @@ from comments.api.serializers import CommentSerializer
 from comments.models import Comment
 from accounts.api.serializers import UserDetailSerializer
 from posts.models import Post
+from django.contrib.auth import get_user_model
 
 
+User = get_user_model()
 class PostCreateUpdateSerializer(ModelSerializer):
 	class Meta:
 		model = Post

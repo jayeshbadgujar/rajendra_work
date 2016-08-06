@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
+from rest_framework import generics
 
 from rest_framework.filters import (
 	SearchFilter,
@@ -24,12 +25,14 @@ from rest_framework.generics import (
 	RetrieveUpdateAPIView
 	)
 
-from posts.api.permissions import IsOwnerOrReadOnly
+from .permission import IsOwnerOrReadOnly
 from posts.api.pagination import PostLimitOffsetPagiantion, PostPageNumberPagination
 
 from .serializers import (
 	UserCreateSerializer,
-	UserLoginSerializer
+	UserLoginSerializer,
+	UserListSerializer,
+	UserDetailSerializer
 	)
 
 User = get_user_model()
@@ -59,3 +62,20 @@ class UserLoginAPIView(APIView):
 			new_data = serializer.data
 			return Response(new_data, status=HTTP_200_OK)
 		return Response(serializer.error, status=HTTP_400_BAD_REQUEST)
+
+
+class UserList(generics.ListAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserListSerializer
+	permission_classes = [IsAuthenticated]
+
+
+class UserDetail(generics.RetrieveAPIView, UpdateAPIView):
+	queryset = User.objects.all()
+	serializer_class = UserDetailSerializer
+	permission_classes = [IsOwnerOrReadOnly,]
+
+	def delete(self, request, pk, format=None):
+		user = self.get_object(pk)
+		user.delete()
+		return Response(status=status.HTTP_204_NOT_CONTENT)
